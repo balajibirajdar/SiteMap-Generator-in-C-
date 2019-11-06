@@ -1,0 +1,27 @@
+internal static class SiteMapHelper
+    {
+        public static string Path = HttpContext.Current.Server.MapPath("~/sitemap.xml");
+        public static void AddSiteMapEntry(SiteMapModel siteMapModel)
+        {
+            string postUrl = "https://www.balajibirajdar.com/" + siteMapModel.PageUrl; 
+                
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.Load(HttpContext.Current.Server.MapPath("~/sitemap.xml"));
+            XmlElement urlNode = xmlDocument.CreateElement("url");
+
+            XmlElement locNode = xmlDocument.CreateElement("loc");
+            locNode.InnerText = postUrl;
+            urlNode.AppendChild(locNode);
+
+            XmlElement lastModNode = xmlDocument.CreateElement("lastmod");
+            lastModNode.InnerText = DateTime.Now.ToString("yyyy-mm-ddThh:mm:ss:zzz");
+            urlNode.AppendChild(lastModNode);
+
+            XmlElement priorityNode = xmlDocument.CreateElement("priority");
+            priorityNode.InnerText = "0.80";
+            urlNode.AppendChild(priorityNode);
+
+            xmlDocument.DocumentElement.AppendChild(urlNode);
+            xmlDocument.Save(HttpContext.Current.Server.MapPath("~/sitemap.xml"));
+        }
+    }
